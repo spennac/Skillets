@@ -1,4 +1,5 @@
-name: "Configuración inicial completa de firewall"  
+name: "Configuración inicial completa de firewall"
+label: "panos"
 description: "Onboarding de firewall (red, servicios, políticas base)"  
 labels:  
   type: panos  
