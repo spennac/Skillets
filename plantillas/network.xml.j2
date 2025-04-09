@@ -1,0 +1,26 @@
+<config>  
+  <devices>  
+    <entry name="{{ fw_hostname }}">  
+      <network>  
+        <interface>  
+          <entry name="ethernet1/1">  
+            <layer3>  
+              <ip>  
+                <entry name="{{ mgmt_ip }}"/>  
+              </ip>  
+            </layer3>  
+          </entry>  
+        </interface>  
+        <zone>  
+          <entry name="MGMT-ZONE">  
+            <network>  
+              <layer3>  
+                <member>ethernet1/1</member>  
+              </layer3>  
+            </network>  
+          </entry>  
+        </zone>  
+      </network>  
+    </entry>  
+  </devices>  
+</config>  
