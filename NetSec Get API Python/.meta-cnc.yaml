@@ -27,3 +27,6 @@ variables:
 snippets:
   - name: get_api_script
     file: get_api_script.py
+    output_type: text
+    outputs:
+    - name: api_key
