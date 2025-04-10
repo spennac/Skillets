@@ -5,28 +5,35 @@ description: |
   Skillet para Generar la PAN-OS 'api_key'.
 
 type: rest
-
 labels:
-  collection:
-    - NETSEC
+  collection: NETSEC
+  os: panos
 
 variables:
   - name: TARGET_IP
-    description: Host
-    default: 127.0.0.1
+    description: "IP/Host del firewall"
+    default: "127.0.0.1"
     type_hint: fqdn_or_ip
-  - name: TARGET_USERNAME
-    description: Username
-    default: admin
-    type_hint: text
-  - name: TARGET_PASSWORD
-    description: Password
-    default: admin
-    type_hint: password
+    required: true
 
+  - name: TARGET_USERNAME
+    description: "Usuario administrativo"
+    default: "admin"
+    type_hint: text
+    required: true
+
+  - name: TARGET_PASSWORD
+    description: "Contraseña"
+    default: "admin"
+    type_hint: password
+    required: true
+    
 snippets:
-  - name: get_api_script
-    file: get_api_script.py
-    output_type: text
+  - name: generate_api_key
+    script: |
+      #!/bin/bash
+      python3 get_api_script.py > api_key_output.txt
+      source api_key_output.txt  # Carga API_KEY como variable
     outputs:
-    - name: api_key
+      - name: api_key
+        capture_pattern: "API_KEY=(.*)"

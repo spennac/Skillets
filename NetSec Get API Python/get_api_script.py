@@ -1,39 +1,54 @@
 import os
+import sys
 import requests
-import urllib3
 import xml.etree.ElementTree as ET
+from requests.exceptions import RequestException
 
-# Desactivar advertencias de certificado SSL (sólo para entornos de prueba)
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+# Configuración desde variables de entorno
+FW_IP = os.getenv('TARGET_IP', '').strip()
+USERNAME = os.getenv('TARGET_USERNAME', '').strip()
+PASSWORD = os.getenv('TARGET_PASSWORD', '').strip()
 
-# Configuración del firewall
-fw_ip = os.environ.get('TARGET_IP', 'default')
-username = os.environ.get('TARGET_USERNAME', 'default')
-password = os.environ.get('TARGET_PASSWORD', 'default')
+# Validación básica de inputs
+if not all([FW_IP, USERNAME, PASSWORD]):
+    sys.stderr.write(
+        "Error: Faltan variables de entorno (TARGET_IP/USERNAME/PASSWORD)\n")
+    sys.exit(1)
 
-# URL para generar la API key
-url = f'https://{fw_ip}/api/?type=keygen&user={username}&password={password}'
 
-try:
-    # Realizar la solicitud HTTPS (ignorando verificación SSL para pruebas)
-    response = requests.get(url, verify=False)
+def generate_api_key(fw_ip: str, username: str, password: str) -> str:
+    """Genera API Key y maneja errores estructurados"""
+    url = f"https://{fw_ip}/api/?type=keygen&user={username}&password={password}"
 
-    # Verificar si la solicitud fue exitosa
-    if response.status_code == 200:
-        # Parsear la respuesta XML
+    try:
+        response = requests.get(
+            url,
+            verify=True,  # En producción, usa certificados válidos
+            timeout=10
+        )
+        response.raise_for_status()  # Lanza excepción para códigos 4xx/5xx
+
         root = ET.fromstring(response.text)
+        if root.attrib.get('status') != 'success':
+            raise ValueError(f"API respondió con error: {root.attrib}")
 
-        # Extraer la API key
-        if root.attrib['status'] == 'success':
-            api_key = root.find('.//key').text
-            print(f"API Key generada con éxito: {api_key}")
-        else:
-            print("Error al generar la API key:", root.attrib['status'])
-    else:
-        print(
-            f"Error en la solicitud. Código de estado: {response.status_code}")
+        api_key = root.find('.//key').text
+        if not api_key:
+            raise ValueError("No se encontró API Key en la respuesta")
 
-except requests.exceptions.RequestException as e:
-    print(f"Error de conexión: {e}")
-except ET.ParseError as e:
-    print(f"Error al parsear la respuesta XML: {e}")
+        return api_key
+
+    except RequestException as e:
+        raise ConnectionError(f"Error de conexión con {fw_ip}: {str(e)}")
+    except ET.ParseError:
+        raise ValueError("Respuesta XML malformada del firewall")
+
+
+if __name__ == "__main__":
+    try:
+        api_key = generate_api_key(FW_IP, USERNAME, PASSWORD)
+        print(f"API_KEY={api_key}")
+        sys.exit(0)
+    except Exception as e:
+        sys.stderr.write(f"ERROR: {str(e)}\n")
+        sys.exit(1)
