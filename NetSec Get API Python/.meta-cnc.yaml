@@ -1,5 +1,5 @@
-name: Creacion_API_Key
-label: Generar PAN-OS API Key
+name: Creacion_API_Key_2.0
+label: Generar PAN-OS API Key mediante Python
 
 description: |
   Skillet para Generar la PAN-OS 'api_key'.
@@ -25,9 +25,5 @@ variables:
     type_hint: password
 
 snippets:
-  - name: key_gen
-    path: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
-    output_type: xml
-    outputs:
-      - name: api_key
-        capture_pattern: result/key
+  - name: get_api_script
+    file: get_api_script.py
