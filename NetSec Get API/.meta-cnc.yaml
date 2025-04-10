@@ -23,10 +23,10 @@ variables:
     description: Password
     default: admin
     type_hint: password
-    
+
 snippets:
   - name: generate_api_key
-    path: "https://{{ firewall_ip }}/api/?type=keygen&user={{ username }}&password={{ password }}"
+    path: "https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}"
     method: GET
     output_type: xml
     outputs:
@@ -40,3 +40,4 @@ snippets:
         xpath: "//@status = 'success'"
       - name: key_exists
         xpath: "boolean(//key)"
+        
