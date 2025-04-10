@@ -1,36 +1,27 @@
-name: Creacion_API_Key_2.0
-label: Generar PAN-OS API Key mediante Python
-
-description: |
-  Skillet para Generar la PAN-OS 'api_key'.
-
-type: rest
+name: "PAN-OS API Key Generator Python"
+description: "Generador API key Mediante Python"
+type: python
 labels:
   collection: NETSEC
   os: panos
+  sdk: true
 
 variables:
-  - name: TARGET_IP
-    description: "IP/Host del firewall"
-    default: "127.0.0.1"
-    type_hint: fqdn_or_ip
+  - name: target_ip
+    description: "IP/FQDN del firewall"
+    type: text
     required: true
-
-  - name: TARGET_USERNAME
+  - name: username
     description: "Usuario administrativo"
+    type: text
     default: "admin"
-    type_hint: text
-    required: true
-
-  - name: TARGET_PASSWORD
+  - name: password
     description: "Contraseña"
-    default: "admin"
-    type_hint: password
+    type: password
     required: true
 
-snippets:
-  - name: generate_api_key
-    script: get_api_script.py
-    outputs:
-      - name: api_key
-        capture_pattern: "API_KEY=(.*)"
+outputs:
+  - name: api_key
+    description: "API Key generada"
+
+entrypoint: generate_api_key.py
