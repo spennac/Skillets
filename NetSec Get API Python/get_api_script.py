@@ -7,12 +7,12 @@ import xml.etree.ElementTree as ET
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Configuración del firewall
-TARGET_IP = os.environ.get('TARGET_IP', 'default')
-TARGET_USERNAME = os.environ.get('TARGET_USERNAME', 'default')
-TARGET_PASSWORD = os.environ.get('TARGET_PASSWORD', 'default')
+fw_ip = os.environ.get('TARGET_IP', 'default')
+username = os.environ.get('TARGET_USERNAME', 'default')
+password = os.environ.get('TARGET_PASSWORD', 'default')
 
 # URL para generar la API key
-url = f'https://{TARGET_IP}/api/?type=keygen&user={TARGET_USERNAME}&password={TARGET_PASSWORD}'
+url = f'https://{fw_ip}/api/?type=keygen&user={username}&password={password}'
 
 try:
     # Realizar la solicitud HTTPS (ignorando verificación SSL para pruebas)
