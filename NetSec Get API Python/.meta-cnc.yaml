@@ -1,4 +1,5 @@
 name: "PAN-OS API Key Generator Python"
+label: "PAN-OS API Key Generator Python"
 description: "Generador API key Mediante Python"
 type: python3
 labels:
