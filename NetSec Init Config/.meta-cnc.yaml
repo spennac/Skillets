@@ -1,8 +1,8 @@
-name: PAN-OS Init Config
-label: PAN-OS Init Config
+name: PAN-OS Security Rules
+label: PAN-OS Init Security Rules
 
 description: |
-  Skillet para Generar la Configuracion Inicial de PAN-OS.
+  Skillet para crear reglas de seguridad básicas en PAN-OS.
 
 type: python3
 
@@ -16,16 +16,24 @@ variables:
     default: 127.0.0.1
     type_hint: fqdn_or_ip
   - name: TARGET_USERNAME
-    description: TARGET_USERNAME
+    description: PAN-OS Username
     default: admin
     type_hint: text
   - name: TARGET_PASSWORD
     description: PAN-OS Password
     default: paloalto
     type_hint: password
+  - name: FROM_ZONES
+    description: "Zonas de origen (separadas por comas)"
+    default: "trust"
+    type_hint: text
+  - name: TO_ZONES
+    description: "Zonas de destino (separadas por comas)"
+    default: "untrust"
+    type_hint: text
 
 snippets:
-  - name: init_control_policies
+  - name: security_rules
     file: script.py
     outputs:
       - name: config_status

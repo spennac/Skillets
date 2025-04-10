@@ -1,108 +1,67 @@
-from pandevice import firewall
-from pandevice import policies
-from pandevice.errors import PanDeviceError
 import os
-import sys
+from panos import firewall
+from panos.policies import SecurityRule
 
 
-def configurar_politicas_seguridad(fw):
-    """Configura políticas de seguridad basadas en App-ID"""
+def crear_reglas_buenas_practicas(fw, from_zones, to_zones):
+    """Crea reglas de seguridad con buenas prácticas"""
+    print(
+        f"::set-output name=status::Creando reglas de seguridad para zonas {from_zones}->{to_zones}...")
 
-    print("\n=== Configurando Políticas de Seguridad ===")
+    # Lista de reglas a crear (nombre, origen, destino, servicio, acción, descripción)
+    reglas = [
+        ("Permitir DNS saliente", ["192.168.1.0/24"], "any", ["udp/53"], "allow",
+         "Permitir resolución DNS hacia internet"),
+        ("Permitir HTTP/HTTPS saliente", ["192.168.1.0/24"], "any", ["tcp/80", "tcp/443"], "allow",
+         "Permitir navegación web hacia internet"),
+        ("Denegar tráfico interno no autorizado", ["192.168.1.0/24"], "192.168.1.0/24", "any", "deny",
+         "Bloquear tráfico lateral no autorizado entre hosts internos"),
+        ("Acceso SSH a servidores", ["172.16.0.0/24"], ["10.0.0.10-10.0.0.20"], ["tcp/22"], "allow",
+         "Permitir acceso SSH desde usuarios VPN a servidores"),
+        ("Acceso web a DMZ", "any", ["10.0.0.0/24"], ["tcp/80", "tcp/443"], "allow",
+         "Permitir acceso web a servidores en DMZ"),
+        ("Denegar todo lo demás", "any", "any", "any", "deny",
+         "Regla de denegación explícita final"),
+    ]
 
-    # Obtener rulebase existente o crear nueva
-    rulebase = fw.find(policies.Rulebase) or policies.Rulebase()
-    fw.add(rulebase)
-
-    # 1. Política de denegación por defecto (con logging)
-    regla_deny = policies.SecurityRule(
-        name="Deny-All",
-        description="Bloquear todo el tráfico no permitido explícitamente",
-        fromzone=["any"],
-        tozone=["any"],
-        source=["any"],
-        destination=["any"],
-        application=["any"],
-        service=["application-default"],
-        action="deny",
-        log_setting="log-both"
-    )
-
-    # 2. Política de descifrado SSL
-    regla_decrypt = policies.SecurityRule(
-        name="Decrypt-Outbound",
-        description="Descifrar tráfico saliente para inspección",
-        fromzone=["trust"],
-        tozone=["untrust"],
-        source=["any"],
-        destination=["any"],
-        application=["web-browsing", "ssl"],
-        action="decrypt",
-        log_setting="log-both"
-    )
-
-    # 3. Política para tráfico web seguro
-    regla_web = policies.SecurityRule(
-        name="Allow-Web",
-        description="Permitir tráfico web seguro",
-        fromzone=["any"],
-        tozone=["any"],
-        source=["any"],
-        destination=["any"],
-        application=["web-browsing", "ssl"],
-        action="allow",
-        log_setting="log-start"
-    )
-
-    # 4. Política para DNS seguro (DoH/DoT)
-    regla_dns = policies.SecurityRule(
-        name="Allow-Secure-DNS",
-        description="Permitir solo DNS sobre HTTPS/TLS",
-        fromzone=["any"],
-        tozone=["any"],
-        source=["any"],
-        destination=["any"],
-        application=["dns-over-https", "dns-over-tls"],
-        action="allow",
-        log_setting="log-start"
-    )
-
-    # Lista de reglas a configurar
-    reglas = [regla_deny, regla_decrypt, regla_web, regla_dns]
-
-    # Aplicar reglas si no existen
-    for regla in reglas:
-        if not rulebase.find(policies.SecurityRule, regla.name):
-            rulebase.add(regla)
-            regla.create()
-            print(f"Política '{regla.name}' configurada")
-        else:
-            print(f"Política '{regla.name}' ya existe - omitiendo")
+    for nombre, origen, destino, servicio, accion, descripcion in reglas:
+        try:
+            rule = SecurityRule(
+                name=nombre,
+                fromzone=from_zones,
+                tozone=to_zones,
+                source=origen,
+                destination=destino,
+                service=servicio,
+                action=accion,
+                description=descripcion
+            )
+            fw.add(rule)
+            rule.create()
+            print(f"Regla creada: {nombre}")
+        except Exception as e:
+            print(f"Error al crear regla {nombre}: {e}")
 
 
 def main():
-    # Obtener parámetros de Panhandler
     hostname = os.getenv('TARGET_IP', '127.0.0.1')
     username = os.getenv('TARGET_USERNAME', 'admin')
     password = os.getenv('TARGET_PASSWORD', 'paloalto')
 
+    # Obtener zonas de las variables del skillet
+    from_zones = os.getenv('FROM_ZONES', 'trust,untrust').split(',')
+    to_zones = os.getenv('TO_ZONES', 'trust,untrust').split(',')
+
     try:
-        # Conectar al firewall
+        # Establecer conexión con el firewall
         fw = firewall.Firewall(hostname, username, password)
-        print(f"Conectado a {hostname} exitosamente")
+        print("::set-output name=status::Conexión establecida correctamente!")
 
-        # Aplicar configuración de políticas
-        configurar_politicas_seguridad(fw)
+        crear_reglas_buenas_practicas(fw, from_zones, to_zones)
 
-        # Commit de cambios
-        fw.commit(sync=True)
-        print("\nConfiguración aplicada exitosamente")
-        print("::set-output name=status::success")
-
-    except PanDeviceError as e:
-        print(f"Error: {str(e)}")
-        print("::set-output name=status::failed")
-        sys.exit(1)
+        print("::set-output name=status::Configuración completada con éxito!")
+    except Exception as e:
+        print(f"::set-output name=status::Error: {str(e)}")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,2 @@
 panos
-pandevice
-requests
 os
-sys
