@@ -7,8 +7,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Configuración del firewall
 TARGET_IP = 'TU_TARGET_IP'
-TARGET_USERNAME = 'TU_USUARIO'
-TARGET_PASSWORD = 'TU_CONTRASEÑA'
+TARGET_USERNAME = 'TARGET_USERNAME'
+TARGET_PASSWORD = 'TARGET_PASSWORD'
 
 # URL para generar la API key
 url = f'https://{TARGET_IP}/api/?type=keygen&user={TARGET_USERNAME}&password={TARGET_PASSWORD}'
