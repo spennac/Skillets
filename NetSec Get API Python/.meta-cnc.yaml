@@ -1,9 +1,9 @@
 name: "PAN-OS API Key Generator Python"
 description: "Generador API key Mediante Python"
-type: python
+type: python3
 labels:
   collection: NETSEC
-  os: panos
+  os: python3
   sdk: true
 
 variables:
