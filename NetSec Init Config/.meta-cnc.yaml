@@ -9,11 +9,7 @@ type: python3
 labels:
   collection:
     - NETSEC
-
-dependencies:
-  - pandevice
-  - requests
-  
+    
 variables:
   - name: TARGET_IP
     description: PAN-OS Host

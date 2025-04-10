@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Configuración inicial de PAN-OS - Políticas de seguridad basadas en App-ID
-"""
-
 from pandevice import firewall
 from pandevice import policies
 from pandevice.errors import PanDeviceError
