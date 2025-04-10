@@ -28,16 +28,8 @@ snippets:
   - name: generate_api_key
     path: "https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}"
     method: GET
-    output_type: xml
+    output_type: text
     outputs:
       - name: api_key
-        capture_pattern: "//key/text()"  # XPath directo al texto
-        transform: "{{ output | trim }}"  # Elimina espacios/lineas extras
-
-    # Validación de respuesta
-    conditions:
-      - name: valid_response
-        xpath: "//@status = 'success'"
-      - name: key_exists
-        xpath: "boolean(//key)"
-        
+        capture_pattern: "<key>(.*?)</key>"  # Regex directo al contenido
+        transform: "{{ output | trim }}"
