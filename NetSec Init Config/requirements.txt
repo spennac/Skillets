@@ -1,3 +1,1 @@
-panos
-pandevice
-pan-os-python
+pan-os-python=1.12.1
