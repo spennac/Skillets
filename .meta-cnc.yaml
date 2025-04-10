@@ -25,8 +25,8 @@ variables:
     type_hint: password
 
 snippets:
-  - name: apply_security_policies
-    file: security_policies.py
+  - name: init_control_policies
+    file: script.py
     outputs:
       - name: config_status
         capture_pattern: "::set-output name=status::(.*)"
