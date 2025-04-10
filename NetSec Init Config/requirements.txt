@@ -1,2 +1,6 @@
 panos
+pandevice
+requests
 os
+sys
+pan-os-python>=1.8,<2.0 ; python_version >= "3.9" and python_version < "4.0"
