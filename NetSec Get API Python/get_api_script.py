@@ -16,9 +16,9 @@ if not all([FW_IP, USERNAME, PASSWORD]):
     sys.exit(1)
 
 
-def generate_api_key(fw_ip: str, username: str, password: str) -> str:
+def generate_api_key(FW_IP: str, USERNAME: str, PASSWORD: str) -> str:
     """Genera API Key y maneja errores estructurados"""
-    url = f"https://{fw_ip}/api/?type=keygen&user={username}&password={password}"
+    url = f"https://{FW_IP}/api/?type=keygen&user={USERNAME}&password={PASSWORD}"
 
     try:
         response = requests.get(
@@ -39,7 +39,7 @@ def generate_api_key(fw_ip: str, username: str, password: str) -> str:
         return api_key
 
     except RequestException as e:
-        raise ConnectionError(f"Error de conexión con {fw_ip}: {str(e)}")
+        raise ConnectionError(f"Error de conexión con {FW_IP}: {str(e)}")
     except ET.ParseError:
         raise ValueError("Respuesta XML malformada del firewall")
 
