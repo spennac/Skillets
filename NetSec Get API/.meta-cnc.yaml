@@ -1,4 +1,4 @@
-name: Creacion_API_Key
+name: Generar PAN-OS API Key
 label: Generar PAN-OS API Key
 
 description: |
@@ -21,15 +21,13 @@ variables:
     type_hint: text
   - name: TARGET_PASSWORD
     description: Password
-    default: admin
+    default: paloalto
     type_hint: password
 
 snippets:
-  - name: generate_api_key
-    path: "https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}"
-    method: GET
-    output_type: text
+  - name: key_gen
+    path: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
+    output_type: xml
     outputs:
       - name: api_key
-        capture_pattern: "<key>(.*?)</key>"  # Regex directo al contenido
-        transform: "{{ output | trim }}"
+        capture_pattern: result/key

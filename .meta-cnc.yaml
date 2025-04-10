@@ -1,0 +1,32 @@
+name: PAN-OS Init Config
+label: PAN-OS Init Config
+
+description: |
+  Skillet para Generar la Configuracion Inicial de PAN-OS.
+
+type: python3
+
+labels:
+  collection:
+    - NETSEC
+
+variables:
+  - name: TARGET_IP
+    description: PAN-OS Host
+    default: 127.0.0.1
+    type_hint: fqdn_or_ip
+  - name: TARGET_USERNAME
+    description: TARGET_USERNAME
+    default: admin
+    type_hint: text
+  - name: TARGET_PASSWORD
+    description: PAN-OS Password
+    default: paloalto
+    type_hint: password
+
+snippets:
+  - name: apply_security_policies
+    file: security_policies.py
+    outputs:
+      - name: config_status
+        capture_pattern: "::set-output name=status::(.*)"
