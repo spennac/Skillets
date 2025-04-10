@@ -1,5 +1,5 @@
-name: "Configuración inicial completa de firewall"
-label: "panos"
+name: "Configuración inicial de firewall"
+label: "NETSEC"
 description: "Onboarding de firewall (red, servicios, políticas base)"  
 labels:  
   type: panos  
