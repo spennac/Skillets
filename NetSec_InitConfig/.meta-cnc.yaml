@@ -8,19 +8,19 @@ type: python3
 
 labels:
   collection:
-    - NETSEC
+    - NetSec
     
 variables:
   - name: TARGET_IP
-    description: PAN-OS Host
+    description: PAN-OS Device IP / Hostname
     default: 127.0.0.1
     type_hint: fqdn_or_ip
   - name: TARGET_USERNAME
-    description: PAN-OS Username
+    description: Username
     default: admin
     type_hint: text
   - name: TARGET_PASSWORD
-    description: PAN-OS Password
+    description: Password
     default: paloalto
     type_hint: password
   - name: FROM_ZONES
@@ -34,7 +34,7 @@ variables:
 
 snippets:
   - name: security_rules
-    file: script.py
+    file: ../NetSec_InitConfig.py
     outputs:
       - name: config_status
         capture_pattern: "::set-output name=status::(.*)"

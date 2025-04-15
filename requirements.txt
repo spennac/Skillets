@@ -1,0 +1,5 @@
+pan-os-python==1.12.1
+pandevice==0.14.0
+click==8.1.8
+skilletlib==1.2.5
+urllib3==2.4.0
