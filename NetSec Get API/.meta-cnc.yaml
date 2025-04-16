@@ -10,7 +10,7 @@ type: panos
 # more complex skillets may express a dependency on another skillet that should be loaded before this one.
 # For example, a set of skillets may build off of a single 'golden config' that contains shared configuration
 # As this skillet is very simple, there is no need to build on another one.
-extends:
+
 
 # Labels allow grouping and type specific options and are generally only used in advanced cases
 labels:
@@ -20,15 +20,15 @@ labels:
 # variables define the things an operator may customize in this skillet. Things like DNS servers, NTP addresses, etc
 # may be customized for each deployment. Each variable will be rendered as a form field in the panhandler application
 variables:
-  - name: TARGET_IP
+  - name: IP
     description: PAN-OS Device IP / Hostname
-    default: null
+    default: 127.0.0.1
     type_hint: fqdn_or_ip
-  - name: TARGET_USERNAME
+  - name: USERNAME
     description: Username
     default: admin
     type_hint: text
-  - name: TARGET_PASSWORD
+  - name: PASSWORD
     description: Password
     default: paloalto
     type_hint: password
@@ -39,7 +39,7 @@ variables:
 # in the 'variables' section.
 snippets:
   - name: key_gen
-    xpath: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
+    xpath: https://{{ IP }}/api/?type=keygen&user={{ USERNAME }}&password={{ PASSWORD }}
     output_type: xml
     outputs:
       - name: api_key

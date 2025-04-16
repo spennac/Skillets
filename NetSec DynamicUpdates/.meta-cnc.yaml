@@ -10,7 +10,6 @@ type: python3
 # more complex skillets may express a dependency on another skillet that should be loaded before this one.
 # For example, a set of skillets may build off of a single 'golden config' that contains shared configuration
 # As this skillet is very simple, there is no need to build on another one.
-extends:
   
 # Labels allow grouping and type specific options and are generally only used in advanced cases
 labels:
