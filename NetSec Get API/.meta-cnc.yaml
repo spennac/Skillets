@@ -1,50 +1,45 @@
-name: "generate_pan_api_key"
-label: "Generate PAN-OS API Key"
-description: "Generates API key for PAN-OS devices"
-type: "rest"  # Tipo correcto para operaciones REST API
+name: Generate PAN-OS API Key
+# label used for menu selection
+label: Generate PAN-OS API Key
 
+description: |
+  This skillet demonstrates a simple REST api call to a PAN-OS NGFW to generate a new API Key. This key will
+  then be stored in your session for future use by other skillets that require the 'api_key' variable.
 
+# type of skillet (panos or panorama or template or terraform)
+type: rest
+
+# Labels allow grouping and type specific options and are generally only used in advanced cases
 labels:
-    collection:
-      - NetSec
+  collection:
+    - NetSec
 
-# Variables con validación
 variables:
-  - name: "target_ip"
-    description: "Firewall management IP"
-    type: "string"
-    required: true
-    hint: "IP or FQDN of the firewall"
-  
-  - name: "username"
-    description: "Admin username"
-    type: "string"
-    required: true
-    default: "admin"
-  
-  - name: "password"
-    description: "Admin password"
-    type: "password"
-    required: true
-    secret: true  # Marca como sensible
+  - name: TARGET_IP
+    description: Host
+    default: 127.0.0.1
+    type_hint: fqdn_or_ip
+  - name: TARGET_USERNAME
+    description: Username
+    default: admin
+    type_hint: text
+  - name: TARGET_PASSWORD
+    description: Password
+    default: admin
+    type_hint: password
 
-# Tareas REST (mejor que 'snippets' según doc)
-tasks:
-  - name: "generate_key"
-    request:
-      url: "https://{{ target_ip }}/api"
-      method: "GET"
-      params:
-        type: "keygen"
-        user: "{{ username }}"
-        password: "{{ password }}"
-      verify: false  # Para no verificar certificado SSL
-    register: "api_response"  # Registra la respuesta
-    failed_when: "api_response.status != 200 or 'result' not in api_response.json()"
 
-# Procesamiento de salida
-output:
-  - name: "api_key"
-    value: "{{ api_response.json().result.key }}"
-    capture_pattern: "<key>(.*?)</key>"  # Patrón para extraer del XML
-    description: "Generated API key"
+# Snippets is an ordered list of configuration xml fragments that will be pushed to the PAN-OS NGFW. The xpath
+# determines where in the configuration heirarchy the xml fragment will be set. 'file' indicates the name of the file
+# to load and parse. Jinja2 style variables will be variable interpolated using the values of the 'variables' defined
+# in the 'variables' section.
+snippets:
+  - name: key_gen
+    path: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
+    # this should output capturing which will set a variable called 'api_key' in the workflow, which can be referenced
+    # in a skillet called after this one, any variable with a name called api_key will be prepopulated with the
+    # value that is captured from the output of this xml api command
+    output_type: xml
+    outputs:
+      - name: api_key
+        capture_pattern: result/key
