@@ -1,36 +1,50 @@
-name: Generate PAN-OS API Key
-label: Generate PAN-OS API Key
-description: |
-  PAN-OS API KEY Generation
+name: "generate_pan_api_key"
+label: "Generate PAN-OS API Key"
+description: "Generates API key for PAN-OS devices"
+type: "rest"  # Tipo correcto para operaciones REST API
 
-type: rest
+# Metadata para UI de Panhandler
+metadata:
+  display_name: "Generate API Key"
+  class_restrictions: ["panos"]
 
-labels:
-  collection:
-    - NetSec
-
+# Variables con validación
 variables:
-  - name: TARGET_IP
-    description: PAN-OS Device IP
-    default: 127.0.0.1
-    type_hint: fqdn_or_ip
-  - name: TARGET_USERNAME
-    description: Username 
-    default: admin
-    type_hint: text
-  - name: TARGET_PASSWORD
-    description: Password
-    default: paloalto
-    type_hint: password
+  - name: "target_ip"
+    description: "Firewall management IP"
+    type: "string"
+    required: true
+    hint: "IP or FQDN of the firewall"
+  
+  - name: "username"
+    description: "Admin username"
+    type: "string"
+    required: true
+    default: "admin"
+  
+  - name: "password"
+    description: "Admin password"
+    type: "password"
+    required: true
+    secret: true  # Marca como sensible
 
-snippets:
-  - name: key_gen
-    path: https://{{ TARGET_IP }}/api/?type=keygen
-    operation: post
-    payload: user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
-    headers:
-      Content-Type: application/x-www-form-urlencoded
-    output_type: xml
-    outputs:
-      - name: api_key
-        capture_pattern: result/key
+# Tareas REST (mejor que 'snippets' según doc)
+tasks:
+  - name: "generate_key"
+    request:
+      url: "https://{{ target_ip }}/api"
+      method: "GET"
+      params:
+        type: "keygen"
+        user: "{{ username }}"
+        password: "{{ password }}"
+      verify: false  # Para no verificar certificado SSL
+    register: "api_response"  # Registra la respuesta
+    failed_when: "api_response.status != 200 or 'result' not in api_response.json()"
+
+# Procesamiento de salida
+output:
+  - name: "api_key"
+    value: "{{ api_response.json().result.key }}"
+    capture_pattern: "<key>(.*?)</key>"  # Patrón para extraer del XML
+    description: "Generated API key"
