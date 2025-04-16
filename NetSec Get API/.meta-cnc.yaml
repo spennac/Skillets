@@ -3,10 +3,10 @@ label: "Generate PAN-OS API Key"
 description: "Generates API key for PAN-OS devices"
 type: "rest"  # Tipo correcto para operaciones REST API
 
-# Metadata para UI de Panhandler
-metadata:
-  display_name: "Generate API Key"
-  class_restrictions: ["panos"]
+
+labels:
+    collection:
+      - NetSec
 
 # Variables con validación
 variables:
