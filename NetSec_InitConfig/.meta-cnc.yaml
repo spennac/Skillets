@@ -34,7 +34,7 @@ variables:
 
 snippets:
   - name: security_rules
-    file: NetSec_InitConfig.py
+    file: ../NetSec_InitConfig.py
     outputs:
       - name: config_status
         capture_pattern: "::set-output name=status::(.*)"
