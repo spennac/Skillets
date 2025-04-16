@@ -52,5 +52,5 @@ variables:
 
 snippets:
 -   name: script
-    file: NetSec_DynamicUpdates.py
+    file: ../NetSec_DynamicUpdates.py
     input_type: cli

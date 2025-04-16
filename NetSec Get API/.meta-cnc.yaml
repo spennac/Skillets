@@ -1,15 +1,12 @@
 name: Generate PAN-OS API Key
-# label used for menu selection
 label: Generate PAN-OS API Key
 
 description: |
   This skillet demonstrates a simple REST api call to a PAN-OS NGFW to generate a new API Key. This key will
   then be stored in your session for future use by other skillets that require the 'api_key' variable.
 
-# type of skillet (panos or panorama or template or terraform)
 type: rest
 
-# Labels allow grouping and type specific options and are generally only used in advanced cases
 labels:
   collection:
     - NetSec
@@ -28,17 +25,9 @@ variables:
     default: admin
     type_hint: password
 
-
-# Snippets is an ordered list of configuration xml fragments that will be pushed to the PAN-OS NGFW. The xpath
-# determines where in the configuration heirarchy the xml fragment will be set. 'file' indicates the name of the file
-# to load and parse. Jinja2 style variables will be variable interpolated using the values of the 'variables' defined
-# in the 'variables' section.
 snippets:
   - name: key_gen
     path: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
-    # this should output capturing which will set a variable called 'api_key' in the workflow, which can be referenced
-    # in a skillet called after this one, any variable with a name called api_key will be prepopulated with the
-    # value that is captured from the output of this xml api command
     output_type: xml
     outputs:
       - name: api_key

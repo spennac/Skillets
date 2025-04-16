@@ -31,5 +31,5 @@ variables:
 # in the 'variables' section.
 snippets:
   - name: connect2panorama
-    xpath: /config/devices/entry[@name='localhost.localdomain']/deviceconfig/system
+    xpath: /config/devices/entry[@name='localhost.localdomain']/deviceconfig/system/panorama/local-panorama/panorama-server
     file: connect2panorama.xml
