@@ -3,22 +3,22 @@ label: App Filter Creator
 description: >
   O365 Filter Creator
 
-type: panos
+type: template
 
 labels:
   collection:
     - NetSec
 
 variables:
-  - name: TARGET_IP
+  - name: IP
     description: Host
     default: 127.0.0.1
     type_hint: fqdn_or_ip
-  - name: TARGET_USERNAME
+  - name: USERNAME
     description: Username
     default: admin
     type_hint: text
-  - name: TARGET_PASSWORD
+  - name: PASSWORD
     description: Password
     default: admin
     type_hint: password
