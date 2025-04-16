@@ -5,11 +5,11 @@ from skilletlib.exceptions import SkilletLoaderException
 
 
 @click.command()
-@click.option("-i", "--target_ip", help="IP address of the device (localhost)", type=str, default="localhost")
+@click.option("-i", "--TARGET_IP", help="IP address of the device (localhost)", type=str, default="localhost")
 @click.option("-r", "--target_port", help="Port to communicate to NGFW (443)", type=int, default=443)
-@click.option("-u", "--target_username", help="Firewall Username (admin)", type=str, default="admin")
-@click.option("-p", "--target_password", help="Firewall Password (admin)", type=str, default="admin")
-@click.option("-t", "--content_type", help="Type of dynamic update to update", type=str, default="content")
+@click.option("-u", "--TARGET_USERNAME", help="Firewall Username (admin)", type=str, default="admin")
+@click.option("-p", "--TARGET_PASSWORD", help="Firewall Password (admin)", type=str, default="admin")
+@click.option("-t", "--CONTENT_TYPE", help="Type of dynamic update to update", type=str, default="content")
 def cli(target_ip, target_port, target_username, target_password, content_type):
     """
     Load a baseline configuration. Takes a content_type argument that specifies what type of content to update.
