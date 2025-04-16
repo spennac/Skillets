@@ -22,7 +22,7 @@ labels:
 variables:
 -   name: TARGET_IP
     description: PAN-OS Device IP / Hostname
-    default: null
+    default: 10.0.0.1
     type_hint: fqdn_or_ip
     help_text: ''
 -   name: TARGET_USERNAME
@@ -31,7 +31,7 @@ variables:
     type_hint: text
 -   name: TARGET_PASSWORD
     description: Password
-    default: null
+    default: paloalto
     type_hint: password
 -   name: CONTENT_TYPE
     description: Dynamic Content Type
@@ -52,5 +52,5 @@ variables:
 
 snippets:
 -   name: script
-    file: ../NetSec_DynamicUpdates.py
+    file: NetSec_DynamicUpdates.py
     input_type: cli

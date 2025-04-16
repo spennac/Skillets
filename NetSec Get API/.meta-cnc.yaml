@@ -1,11 +1,9 @@
 name: Generate PAN-OS API Key
-# label used for menu selection
 label: Generate PAN-OS using API Key
-
 description: |
   PAN-OS API KEY Generation
 
-type: panos
+type: rest
 
 # more complex skillets may express a dependency on another skillet that should be loaded before this one.
 # For example, a set of skillets may build off of a single 'golden config' that contains shared configuration
@@ -20,15 +18,15 @@ labels:
 # variables define the things an operator may customize in this skillet. Things like DNS servers, NTP addresses, etc
 # may be customized for each deployment. Each variable will be rendered as a form field in the panhandler application
 variables:
-  - name: IP
+  - name: TARGET_IP
     description: PAN-OS Device IP / Hostname
     default: 127.0.0.1
     type_hint: fqdn_or_ip
-  - name: USERNAME
-    description: Username
+  - name: TARGET_USERNAME
+    description: Username 
     default: admin
     type_hint: text
-  - name: PASSWORD
+  - name: TARGET_PASSWORD
     description: Password
     default: paloalto
     type_hint: password
@@ -39,7 +37,7 @@ variables:
 # in the 'variables' section.
 snippets:
   - name: key_gen
-    xpath: https://{{ IP }}/api/?type=keygen&user={{ USERNAME }}&password={{ PASSWORD }}
+    xpath: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
     output_type: xml
     outputs:
       - name: api_key
