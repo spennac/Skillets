@@ -39,7 +39,7 @@ variables:
 # in the 'variables' section.
 snippets:
   - name: key_gen
-    path: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
+    xpath: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
     output_type: xml
     outputs:
       - name: api_key
