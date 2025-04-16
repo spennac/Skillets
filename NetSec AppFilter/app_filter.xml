@@ -1,0 +1,9 @@
+<application-filter>
+    <entry name="Office365">
+        <tagging>
+            <tag>
+                <member>[Office 365]</member>
+            </tag>
+        </tagging>
+    </entry>
+</application-filter>
