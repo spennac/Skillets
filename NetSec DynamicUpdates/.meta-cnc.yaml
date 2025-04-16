@@ -23,7 +23,7 @@ labels:
 variables:
 -   name: TARGET_IP
     description: PAN-OS Device IP / Hostname
-    default: 127.0.0.1
+    default: null
     type_hint: fqdn_or_ip
     help_text: ''
 -   name: TARGET_USERNAME
