@@ -9,23 +9,7 @@ labels:
   collection:
     - NetSec
 
-variables:
-  - name: IP
-    description: Host
-    default: null
-    type_hint: fqdn_or_ip
-  - name: USERNAME
-    description: Username
-    default: admin
-    type_hint: text
-  - name: PASSWORD
-    description: Password
-    default: admin
-    type_hint: password
-
 snippets:
-  snippets:
-  - name: "application-filter-737607"
-    xpath: "/config/devices/entry[@name=\"localhost.localdomain\"]/vsys/entry[@name=\"vsys1\"]"
-    element: "<application-filter/>"
-    full_xpath: "./devices/entry[@name=\"localhost.localdomain\"]/vsys/entry[@name=\"vsys1\"]/application-filter"
+  - name: filter_creator
+    xpath: /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/application-filter
+    file: app_filter.xml
