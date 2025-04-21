@@ -43,7 +43,7 @@ variables:
     type_hint: text
     help_text: Creates a sample template stack with configuration elements
   - name: DEVICE_GROUP
-    description: Device-group name for Panorama
+    description: Device group name for Panorama
     default: Day1_DG
     type_hint: text
     help_text: Creates a sample device-group with configuration elements
