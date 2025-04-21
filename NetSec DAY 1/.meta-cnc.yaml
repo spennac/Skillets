@@ -1,8 +1,8 @@
-name: PAN-OS DAY 1 Set Config
+name: PAN-OS Firewall Day 1 Set Config
 # label used for menu selection
-label: PAN-OS DAY 1 Set Config
+label: Firewall Day 1 Set Config
 description: |
-    PAN-OS DAY 1 Set Config using Best Practices
+    PAN-OS Day 1 Firewall Set Config Using Best Practices
 
 type: template
 extends:
@@ -42,23 +42,23 @@ variables:
     toggle_hint:
       value: static
   - name: NTP_1
-    description: primary NTP server
+    description: Primary NTP server
     default: 0.pool.ntp.org
     type_hint: text
   - name: NTP_2
-    description: secondary NTP server
+    description: Secondary NTP server
     default: 1.pool.ntp.org
     type_hint: text
   - name: ADMINISTRATOR_USERNAME
-    description: admin username
+    description: Admin Username
     default: admin
     type_hint: text
   - name: DNS_1
-    description: primary dns server
+    description: Primary DNS Server
     default: 8.8.8.8
     type_hint: ip_address
   - name: DNS_2
-    description: secondary dns server
+    description: Secondary DNS Server
     default: 8.8.4.4
     type_hint: ip_address
 
