@@ -1,9 +1,8 @@
-name: PAN-OS Dynamic Content Update and Install
+name: PAN-OS DAY 1 Set Config
 # label used for menu selection
-label: PAN-OS Dynamic Content Update and Install
-
+label: PAN-OS DAY 1 Set Config
 description: |
-    PAN-OS Dynamic Content Update and Install to the latest version
+    PAN-OS DAY 1 Set Config using Best Practices
 
 type: template
 extends:
