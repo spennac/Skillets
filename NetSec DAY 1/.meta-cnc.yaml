@@ -51,7 +51,7 @@ variables:
     type_hint: text
   - name: ADMINISTRATOR_USERNAME
     description: admin username
-    default: adminuser
+    default: admin
     type_hint: text
   - name: DNS_1
     description: primary dns server
