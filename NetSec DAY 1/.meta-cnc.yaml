@@ -5,7 +5,8 @@ label: PAN-OS Dynamic Content Update and Install
 description: |
     PAN-OS Dynamic Content Update and Install to the latest version
 
-type: python3
+type: template
+extends:
 
 # more complex skillets may express a dependency on another skillet that should be loaded before this one.
 # For example, a set of skillets may build off of a single 'golden config' that contains shared configuration
@@ -15,42 +16,57 @@ type: python3
 labels:
     collection:
       - NetSec
-      - 
 # variables define the things an operator may customize in this skillet. Things like DNS servers, NTP addresses, etc
 # may be customized for each deployment. Each variable will be rendered as a form field in the panhandler application
 
 variables:
--   name: TARGET_IP
-    description: PAN-OS Device IP / Hostname
-    default: 10.0.0.1
-    type_hint: fqdn_or_ip
-    help_text: ''
--   name: TARGET_USERNAME
-    description: Username
-    default: admin
+  - name: FW_NAME
+    description: Firewall hostname
+    default: panos-01
     type_hint: text
--   name: TARGET_PASSWORD
-    description: Password
-    default: paloalto
-    type_hint: password
--   name: CONTENT_TYPE
-    description: Dynamic Content Type
-    default: Content
-    type_hint: dropdown
-    dd_list:
-    -   key: content
-        value: Content
-    -   key: anti-virus
-        value: Anti-Virus
-    -   key: wildfire
-        value: Wildfire
+  - name: MGMT_IP
+    description: NGFW management IP
+    default: 192.168.1.10
+    type_hint: ip_address
+    toggle_hint:
+      value: static
+  - name: MGMT_MASK
+    description: NGFW management netmask
+    type_hint: ip_address
+    default: 255.255.255.0
+    toggle_hint:
+      value: static
+  - name: MGMT_DG
+    description: NGFW management default gateway
+    default: 192.168.1.1
+    type_hint: ip_address
+    toggle_hint:
+      value: static
+  - name: NTP_1
+    description: primary NTP server
+    default: 0.pool.ntp.org
+    type_hint: text
+  - name: NTP_2
+    description: secondary NTP server
+    default: 1.pool.ntp.org
+    type_hint: text
+  - name: ADMINISTRATOR_USERNAME
+    description: admin username
+    default: adminuser
+    type_hint: text
+  - name: DNS_1
+    description: primary dns server
+    default: 8.8.8.8
+    type_hint: ip_address
+  - name: DNS_2
+    description: secondary dns server
+    default: 8.8.4.4
+    type_hint: ip_address
 
 # Snippets is an ordered list of configuration xml fragments that will be pushed to the PAN-OS NGFW. The xpath
 # determines where in the configuration hierarchy the xml fragment will be set. 'file' indicates the name of the file
 # to load and parse. Jinja2 style variables will be variable interpolated using the values of the 'variables' defined
 # in the 'variables' section.
-
 snippets:
--   name: script
-    file: ../NetSec_DynamicUpdates.py
-    input_type: cli
+  - name: NetSec Day 1.conf
+    file: NetSec Day 1.conf
