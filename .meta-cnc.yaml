@@ -1,0 +1,105 @@
+name: PAN-OS PANORAMA Day 1 Set Config
+# label used for menu selection
+label: Panorama Day 1 Set Config
+description: |
+    PAN-OS Day 1 Panorama Set Config Using Best Practices
+
+type: template
+extends:
+
+# grouping of like snippets for dynamic menu creation in pan-cnc
+labels:
+    collection:
+      - NetSec
+
+# variables used in the configuration templates
+# type_hint defines the form field type in pan-cnc
+variables:
+  - name: PANORAMA_NAME
+    description: Panorama hostname
+    default: panorama01
+    type_hint: text
+  - name: PANORAMA_IP
+    description: Panorama IP
+    default: 192.168.10.20
+    type_hint: ip_address
+    toggle_hint:
+      value: static
+  - name: PANORAMA_MASK
+    description: Panorama netmask
+    default: 255.255.255.0
+    type_hint: ip_address
+    toggle_hint:
+      value: static
+  - name: PANORAMA_DG
+    description: Panorama Default Gateway
+    default: 192.168.10.1
+    type_hint: ip_address
+    toggle_hint:
+      value: static
+  - name: STACK
+    description: Template stack name for Panorama
+    default: Day1_TP_STACK
+    type_hint: text
+    help_text: Creates a sample template stack with configuration elements
+  - name: DEVICE_GROUP
+    description: Device-group name for Panorama
+    default: Day1_DG
+    type_hint: text
+    help_text: Creates a sample device-group with configuration elements
+  - name: FW_NAME
+    description: Device Name for NGFW
+    default: sample
+    type_hint: text
+  - name: MGMT_IP
+    description: NGFW management IP
+    default: 192.168.1.10
+    type_hint: ip_address
+    toggle_hint:
+      value: static
+  - name: MGMT_MASK
+    description: NGFW Management Netmask
+    type_hint: ip_address
+    default: 255.255.255.0
+    toggle_hint:
+      value: static
+  - name: MGMT_DG
+    description: NGFW Management Default Gateway
+    default: 192.168.1.1
+    type_hint: ip_address
+    toggle_hint:
+      value: static
+  - name: NTP_1
+    description: Primary NTP server
+    default: 0.pool.ntp.org
+    type_hint: text
+  - name: NTP_2
+    description: Secondary NTP server
+    default: 1.pool.ntp.org
+    type_hint: text
+  - name: ADMINISTRATOR_USERNAME
+    description: Admin Username
+    default: admin
+    type_hint: text
+  - name: DNS_1
+    description: Primary DNS server
+    default: 8.8.8.8
+    type_hint: ip_address
+  - name: DNS_2
+    description: Secondary DNS server
+    default: 8.8.4.4
+    type_hint: ip_address
+  - name: SINKHOLE_IPV4
+    description: Sinkhole FQDN IPv4
+    default: sinkhole.paloaltonetworks.com
+    type_hint: text
+    help_text: FQDN value for the IPV4 sinkhole address used in the anti-spyware security profile
+  - name: SINKHOLE_IPV6
+    description: Sinkhole Address IPv6
+    default: 2600:5200::1
+    type_hint: ip_address
+    help_text: IP address for the IPv6 sinkhole used in the anti-spyware security profile
+
+snippets:
+  - name: NetSec Day 1 Panorama.conf
+    file: NetSec Day 1 Panorama.conf
